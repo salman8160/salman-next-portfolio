@@ -1,27 +1,31 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
-    <motion.nav
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-gray-800"
-    >
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/" className="text-white text-lg font-bold">
-          Salman Tabrez
+    <nav className="w-full flex justify-between items-center py-6 px-12 bg-black/80 fixed top-0 left-0 z-50 backdrop-blur">
+      <div className="text-white font-bold text-xl">Salman Tabrez</div>
+      <div className="flex space-x-8">
+        <Link href="/" className={`text-white hover:text-cyan-400 ${pathname === '/' ? 'font-bold text-cyan-400' : ''}`}>
+          Home
         </Link>
-        <div className="flex space-x-6">
-          <Link href="#about" className="text-gray-300 hover:text-cyan-400 transition">About</Link>
-          <Link href="#projects" className="text-gray-300 hover:text-cyan-400 transition">Projects</Link>
-          <Link href="#blog" className="text-gray-300 hover:text-cyan-400 transition">Blog</Link>
-          <Link href="#contact" className="text-gray-300 hover:text-cyan-400 transition">Contact</Link>
-        </div>
+        <Link href="/about" className={`text-white hover:text-cyan-400 ${pathname === '/about' ? 'font-bold text-cyan-400' : ''}`}>
+          About
+        </Link>
+        <Link href="/projects" className={`text-white hover:text-cyan-400 ${pathname === '/projects' ? 'font-bold text-cyan-400' : ''}`}>
+          Projects
+        </Link>
+        <Link href="/blog" className={`text-white hover:text-cyan-400 ${pathname === '/blog' ? 'font-bold text-cyan-400' : ''}`}>
+          Blog
+        </Link>
+        <Link href="/contact" className={`text-white hover:text-cyan-400 ${pathname === '/contact' ? 'font-bold text-cyan-400' : ''}`}>
+          Contact
+        </Link>
       </div>
-    </motion.nav>
+    </nav>
   );
 }

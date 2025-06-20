@@ -1,15 +1,18 @@
 'use client';
 
 import Hero3D from '@/components/Hero3D';
+import ParticlesBackground from '@/components/ParticlesBackground';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-black text-white px-6">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-black text-white px-6 relative overflow-hidden">
+      <ParticlesBackground />
+
       <Hero3D />
 
       {/* Tools & Expertise Section */}
-      <section className="w-full max-w-5xl py-16 flex flex-col items-center">
+      <section className="w-full max-w-5xl py-16 flex flex-col items-center z-10">
         <h2 className="text-4xl font-bold mb-10">Tools & Expertise</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           <Link href="/tools/aws" className="group">

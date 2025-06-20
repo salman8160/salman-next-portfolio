@@ -1,30 +1,28 @@
-// src/components/Projects.tsx
+'use client';
+
+import { motion } from 'framer-motion';
+
 export default function Projects() {
   return (
-    <section id="projects" className="bg-white text-gray-900 py-16 px-6">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Projects</h2>
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-          <div className="p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold mb-3">CI/CD Pipeline Security</h3>
-            <p className="text-gray-700 mb-4">
-              Built end-to-end secure CI/CD pipelines with Jenkins, SonarQube, Checkmarx, BurpSuite DAST, and Kubernetes.
-            </p>
-          </div>
-          <div className="p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold mb-3">GCP Zero-Trust Detection Pipeline</h3>
-            <p className="text-gray-700 mb-4">
-              Designed and implemented Zero Trust architecture with Google SCC, Cloud IDS, and VPC Service Controls.
-            </p>
-          </div>
-          <div className="p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold mb-3">Kubernetes Hardening & Security Automation</h3>
-            <p className="text-gray-700 mb-4">
-              Automated Kubernetes security baselines using kube-bench, OPA, Gatekeeper policies, and custom Terraform modules.
-            </p>
-          </div>
-        </div>
-      </div>
+    <section id="projects" className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-black to-[#0f172a] py-20 px-4">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-4xl md:text-5xl font-extrabold text-white mb-8"
+      >
+        Featured Projects
+      </motion.h2>
+      
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1 }}
+        className="px-8 py-4 bg-cyan-500 text-white rounded-lg text-lg font-semibold shadow-lg hover:bg-cyan-400 hover:scale-105 transition-transform"
+        onClick={() => window.location.href = '#contact'}
+      >
+        View Projects 🚀
+      </motion.button>
     </section>
-  )
+  );
 }

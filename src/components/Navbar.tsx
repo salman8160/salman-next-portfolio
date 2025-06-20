@@ -1,18 +1,27 @@
-// src/components/Navbar.tsx
-'use client'
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Navbar() {
   return (
-    <nav className="bg-black bg-opacity-80 text-white px-6 py-4 fixed top-0 left-0 w-full z-50 shadow-md backdrop-blur-md">
-      <div className="flex justify-between items-center max-w-6xl mx-auto">
-        <div className="text-2xl font-bold">Salman Tabrez</div>
-        <div className="space-x-6 text-sm uppercase tracking-wide">
-          <a href="#about" className="hover:text-blue-400">About</a>
-          <a href="#projects" className="hover:text-blue-400">Projects</a>
-          <a href="#blog" className="hover:text-blue-400">Blog</a>
-          <a href="#contact" className="hover:text-blue-400">Contact</a>
+    <motion.nav
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-gray-800"
+    >
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <Link href="/" className="text-white text-lg font-bold">
+          Salman Tabrez
+        </Link>
+        <div className="flex space-x-6">
+          <Link href="#about" className="text-gray-300 hover:text-cyan-400 transition">About</Link>
+          <Link href="#projects" className="text-gray-300 hover:text-cyan-400 transition">Projects</Link>
+          <Link href="#blog" className="text-gray-300 hover:text-cyan-400 transition">Blog</Link>
+          <Link href="#contact" className="text-gray-300 hover:text-cyan-400 transition">Contact</Link>
         </div>
       </div>
-    </nav>
-  )
+    </motion.nav>
+  );
 }

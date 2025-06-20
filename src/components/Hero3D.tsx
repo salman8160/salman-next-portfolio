@@ -1,38 +1,33 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
-const Hero3D = () => {
+export default function Hero3D() {
   return (
-    <section className="h-screen w-full flex items-center justify-center bg-black text-white">
+    <div className="relative h-screen w-full bg-gradient-to-b from-[#0f172a] to-black text-white flex items-center justify-center">
+      <Canvas>
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[0, 10, 5]} intensity={1} />
+        <Stars radius={50} depth={50} count={1000} factor={4} saturation={0} fade speed={2} />
+        <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={1} />
+      </Canvas>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="absolute top-32 text-center px-6"
+        className="absolute text-center px-4"
       >
         <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-          Salman Tabrez | Cloud Security Architect 🚀
+          Salman Tabrez <br />
+          <span className="text-cyan-400">Cloud Security Architect 🚀</span>
         </h1>
-        <p className="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto">
+        <p className="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">
           Building secure, scalable, high-performance cloud architectures in AWS, GCP & Azure with CI/CD and Kubernetes excellence.
         </p>
       </motion.div>
-
-      <Canvas className="w-full h-full" camera={{ position: [0, 0, 5], fov: 75 }}>
-        <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={2} />
-        <ambientLight intensity={1.2} />
-        <directionalLight position={[0, 5, 5]} intensity={1.5} />
-
-        <mesh rotation={[Math.PI / 3, Math.PI / 4, 0]}>
-          <torusKnotGeometry args={[1, 0.4, 100, 16]} />
-          <meshStandardMaterial color="#00ffff" metalness={0.8} roughness={0.1} />
-        </mesh>
-      </Canvas>
-    </section>
+    </div>
   );
-};
-
-export default Hero3D;
+}

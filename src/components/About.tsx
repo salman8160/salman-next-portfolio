@@ -1,15 +1,33 @@
-// src/components/About.tsx
-export default function About() {
+'use client';
+
+import { motion } from 'framer-motion';
+
+const About = () => {
   return (
-    <section id="about" className="bg-gray-100 text-gray-800 py-16 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold mb-8 text-center">About Me</h2>
-        <p className="text-lg leading-relaxed">
-          I am a Cloud Security Architect with 6+ years of experience in designing and securing complex cloud environments.
-          I have deep expertise across AWS, GCP, Kubernetes, and CI/CD pipeline automation with a focus on DevSecOps.
-          My passion is building secure, scalable architectures and integrating application security at every stage of the software lifecycle.
-        </p>
-      </div>
+    <section
+      id="about"
+      className="flex flex-col justify-center items-center min-h-screen bg-black text-center px-6 py-20"
+    >
+      <motion.h2
+        className="text-4xl md:text-5xl font-bold mb-6 text-purple-400"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        About Me
+      </motion.h2>
+      <motion.p
+        className="text-lg md:text-xl text-gray-300 max-w-4xl mb-8 leading-relaxed"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 1 }}
+      >
+        I am a Cloud Security Architect with 6+ years of expertise in AWS, GCP, Kubernetes, and DevSecOps. 
+        I design secure architectures, build automated CI/CD pipelines with integrated security controls, 
+        and implement Zero Trust principles across cloud environments. My passion is building solutions that scale, perform, and stay secure.
+      </motion.p>
     </section>
-  )
-}
+  );
+};
+
+export default About;

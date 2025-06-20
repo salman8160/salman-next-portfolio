@@ -1,94 +1,81 @@
 'use client';
 
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Html, Float } from '@react-three/drei';
+import { motion } from 'framer-motion';
+
+const pipelineStages = [
+  { name: 'Developer', color: 'bg-cyan-500', details: 'Code committed to GitHub' },
+  { name: 'GitHub Actions', color: 'bg-purple-500', details: 'Trigger CI workflow' },
+  { name: 'SAST', color: 'bg-green-500', details: 'Static Application Security Testing' },
+  { name: 'Build & Package', color: 'bg-yellow-500', details: 'Build Docker image' },
+  { name: 'DAST', color: 'bg-orange-500', details: 'Dynamic Application Security Testing' },
+  { name: 'Deploy', color: 'bg-red-600', details: 'Deploy to Production' },
+];
 
 export default function CICDPipeline() {
   return (
-    <div className="w-full h-[500px] bg-black rounded-xl mt-10 shadow-xl">
-      <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white px-4 py-16">
+      <h1 className="text-4xl font-extrabold mb-6 text-center">
+        Secure CI/CD Pipeline 🚀
+      </h1>
 
-        <OrbitControls enableZoom={true} />
+      <p className="text-lg mb-10 text-center max-w-3xl leading-relaxed">
+        Visualizing a modern CI/CD pipeline with integrated{' '}
+        <span className="text-cyan-400 font-semibold">SAST</span>,{' '}
+        <span className="text-orange-400 font-semibold">DAST</span>, and{' '}
+        <span className="text-yellow-400 font-semibold">Security Gates</span>.
+      </p>
 
-        {/* Developer */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[-8, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#00ffff" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">Developer</div>
-            </Html>
-          </mesh>
-        </Float>
+      <div className="flex items-center justify-center space-x-6 w-full max-w-6xl overflow-x-auto">
+        {pipelineStages.map((stage, index) => (
+          <motion.div
+            key={index}
+            className="flex flex-col items-center group transition-transform duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.2 }}
+          >
+            {/* Stage Circle */}
+            <motion.div
+              className={`w-24 h-24 rounded-full flex items-center justify-center text-center text-sm font-bold ${stage.color} group-hover:scale-125 group-hover:ring-4 group-hover:ring-white/50 transition-all duration-300`}
+              animate={{
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  '0 0 0px rgba(255,255,255,0)',
+                  `0 0 20px rgba(255,255,255,0.4)`,
+                  '0 0 0px rgba(255,255,255,0)',
+                ],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1,
+              }}
+            >
+              {stage.name}
+            </motion.div>
 
-        {/* GitHub */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[-4, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#ff00ff" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">GitHub</div>
-            </Html>
-          </mesh>
-        </Float>
+            {/* Hover Details */}
+            <div className="mt-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center w-32">
+              {stage.details}
+            </div>
 
-        {/* SAST */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[0, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#00ff00" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">SAST</div>
-            </Html>
-          </mesh>
-        </Float>
-
-        {/* Build */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[4, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#ffff00" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">Build</div>
-            </Html>
-          </mesh>
-        </Float>
-
-        {/* DAST */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[8, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#ff8800" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">DAST</div>
-            </Html>
-          </mesh>
-        </Float>
-
-        {/* Deploy */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[12, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#ff4444" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">Deploy</div>
-            </Html>
-          </mesh>
-        </Float>
-
-        {/* Monitor */}
-        <Float floatIntensity={2} rotationIntensity={1}>
-          <mesh position={[16, 0, 0]}>
-            <sphereGeometry args={[0.8, 32, 32]} />
-            <meshStandardMaterial color="#44ff44" />
-            <Html distanceFactor={10}>
-              <div className="text-center text-white text-sm mt-2">Monitor</div>
-            </Html>
-          </mesh>
-        </Float>
-      </Canvas>
+            {/* Connector Line */}
+            {index < pipelineStages.length - 1 && (
+              <motion.div
+                className="w-24 h-1 bg-gradient-to-r from-cyan-400 via-white to-purple-500 mt-4 rounded-full"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            )}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

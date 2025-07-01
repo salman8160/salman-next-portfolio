@@ -1,84 +1,86 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null);
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('sending');
 
-    emailjs
-      .sendForm(
-        'service_aai4rps', // ✅ your EmailJS SERVICE ID
-        'template_w504cfh', // ✅ your EmailJS TEMPLATE ID
-        form.current!,
-        'zPMOx3aXE2kluPXN7' // ✅ your EmailJS PUBLIC KEY
-      )
-      .then(
-        () => {
-          setStatus('success');
-          form.current?.reset();
-          setTimeout(() => setStatus('idle'), 4000);
-        },
-        (error) => {
-          console.error(error.text);
-          setStatus('error');
-          setTimeout(() => setStatus('idle'), 4000);
-        }
+    if (!form.current) return;
+
+    try {
+      // Send user auto-reply
+      await emailjs.sendForm(
+        'service_aai4rps',
+        'template_w504cfh', // Auto-reply to user
+        form.current,
+        'zPMOX3aXE2kluPXN7'
       );
+
+      // Send admin notification
+      await emailjs.send(
+        'service_aai4rps',
+        'template_4u4u9xx', // Notify you (admin)
+        {
+          name: form.current.user_name.value,
+          email: form.current.user_email.value,
+          message: form.current.message.value,
+          title: 'Contact Form Submission',
+        },
+        'zPMOX3aXE2kluPXN7'
+      );
+
+      setSuccessMessage('Message sent successfully!');
+      setErrorMessage('');
+      form.current.reset(); // Clear form
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Failed to send message. Please try again.');
+      setSuccessMessage('');
+    }
   };
 
   return (
-    <section id="contact" className="min-h-screen flex items-center justify-center bg-black px-4 py-20">
-      <form
-        ref={form}
-        onSubmit={sendEmail}
-        className="w-full max-w-md bg-gray-900 border border-purple-500 p-8 rounded-2xl shadow-xl"
-      >
-        <h2 className="text-3xl text-center text-purple-400 font-bold mb-6">Contact Me</h2>
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          required
-          className="w-full p-3 mb-4 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          required
-          className="w-full p-3 mb-4 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-
-        <textarea
-          name="message"
-          placeholder="Your Message"
-          required
-          rows={5}
-          className="w-full p-3 mb-4 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition duration-300"
-        >
-          {status === 'sending' ? 'Sending...' : 'Send Message'}
-        </button>
-
-        {status === 'success' && (
-          <p className="text-green-400 text-center mt-4">✅ Message sent successfully!</p>
-        )}
-        {status === 'error' && (
-          <p className="text-red-400 text-center mt-4">❌ Failed to send message. Try again.</p>
-        )}
-      </form>
-    </section>
+    <div className="flex items-center justify-center min-h-screen bg-black text-white" id="contact">
+      <div className="bg-zinc-900 p-10 rounded-xl border border-purple-600 shadow-lg w-full max-w-lg">
+        <h2 className="text-3xl font-bold text-center mb-6 text-purple-400">Contact Me</h2>
+        <form ref={form} onSubmit={sendEmail} className="space-y-4">
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Your Name"
+            required
+            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
+          />
+          <input
+            type="email"
+            name="user_email"
+            placeholder="Your Email"
+            required
+            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
+          />
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            rows={5}
+            required
+            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
+          ></textarea>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+          >
+            Send Message
+          </button>
+          {successMessage && <p className="text-green-400 text-sm">{successMessage}</p>}
+          {errorMessage && <p className="text-red-400 text-sm">{errorMessage}</p>}
+        </form>
+      </div>
+    </div>
   );
 }

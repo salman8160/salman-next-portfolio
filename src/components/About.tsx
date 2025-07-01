@@ -5,7 +5,7 @@ import ParticlesAbout from "./ParticlesAbout";
 
 const About = () => {
   return (
-    <section className="relative z-10 px-6 py-16 min-h-screen flex items-center justify-center">
+    <section id="about" className="relative z-10 px-6 py-16 min-h-screen flex items-center justify-center">
       <div className="relative bg-[#121212] rounded-3xl border border-purple-600 p-10 shadow-lg max-w-4xl w-full mx-auto overflow-hidden text-white">
         {/* Particles covering entire box */}
         <div className="absolute inset-0 z-0">

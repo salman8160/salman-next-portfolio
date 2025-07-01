@@ -1,61 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
 
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Thank you! Form submission feature coming soon.');
-    // You can integrate Formspree, EmailJS or custom backend here later
+    // For now, just log the input (later: hook up to Formspree/EmailJS)
+    console.log('Submitted:', formData);
   };
 
   return (
-    <section id="contact" className="bg-black text-white px-6 py-20">
-      <div className="max-w-2xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-purple-400 mb-8">
-          Contact Me
-        </h2>
-        <p className="text-center mb-8 text-gray-400">
-          Let’s connect — whether it’s a technical discussion, speaking opportunity,
-          or strategic advisory request.
-        </p>
+    <section id="contact" className="py-20 px-6 bg-black text-white">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-4xl font-bold text-purple-400 mb-10">Contact Me</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <input
             type="text"
             name="name"
             placeholder="Your Name"
-            value={form.name}
             onChange={handleChange}
-            className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600"
+            value={formData.name}
+            className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
             required
           />
           <input
             type="email"
             name="email"
             placeholder="Your Email"
-            value={form.email}
             onChange={handleChange}
-            className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600"
+            value={formData.email}
+            className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
             required
           />
           <textarea
             name="message"
             placeholder="Your Message"
-            rows={5}
-            value={form.message}
             onChange={handleChange}
-            className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600"
+            value={formData.message}
+            className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-600 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
             required
           />
           <button
             type="submit"
-            className="w-full py-3 bg-purple-600 rounded hover:bg-purple-700 transition"
+            className="bg-purple-600 hover:bg-purple-700 transition px-6 py-3 rounded-lg font-semibold"
           >
             Send Message
           </button>
@@ -63,5 +60,6 @@ export default function Contact() {
       </div>
     </section>
   );
-}
+};
 
+export default Contact;

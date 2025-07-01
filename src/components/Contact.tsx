@@ -1,87 +1,96 @@
-"use client";
+'use client';
+import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
-import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { motion } from "framer-motion";
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    from_name: '',
+    from_email: '',
+    message: ''
+  });
 
-const SERVICE_ID = "service_aai4rps";
-const TEMPLATE_ID = "template_4u4u9xx";
-const PUBLIC_KEY = "xWl4GtsmkrGhAFBCj";
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-export default function Contact() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccess(false);
-    setError(false);
+    setStatus('idle');
 
-    const templateParams = {
-      from_name: name,
-      from_email: email,
-      message,
-    };
+    const serviceID = 'service_aai4rps';
+    const notifyTemplateID = 'template_4u4u9xx'; // To YOU
+    const autoReplyTemplateID = 'template_w504cfh'; // To USER
+    const publicKey = 'xWl4GtsmkrGhAFBCj';
 
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-      setSuccess(true);
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch {
-      setError(true);
+      // Send message to YOU
+      await emailjs.send(serviceID, notifyTemplateID, formData, publicKey);
+
+      // Auto-reply to USER
+      await emailjs.send(serviceID, autoReplyTemplateID, formData, publicKey);
+
+      setFormData({ from_name: '', from_email: '', message: '' });
+      setStatus('success');
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setStatus('error');
     }
   };
 
   return (
-    <section id="contact" className="py-20 px-4 md:px-12 lg:px-32 bg-black text-white">
-      <motion.div
-        className="w-full max-w-6xl mx-auto bg-gradient-to-b from-[#0f0f2e] to-black border border-purple-600 p-8 rounded-2xl shadow-xl"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-purple-400 mb-8">Contact Me</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6">
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-lg border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-lg border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-          <textarea
-            placeholder="Your Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#0f0017] to-black px-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-4xl p-10 border border-purple-500 rounded-2xl bg-gradient-to-b from-[#0f0017] to-black shadow-lg">
+        <h2 className="text-4xl font-bold text-center mb-8 text-purple-300">Contact Me</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <input
+            type="text"
+            name="from_name"
+            placeholder="Your Name"
+            value={formData.from_name}
+            onChange={handleChange}
             required
-            className="w-full h-32 bg-gray-800 text-white px-4 py-3 rounded-lg border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+            className="p-4 rounded-md border border-purple-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
-          <button
-            type="submit"
-            className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300 shadow-md shadow-purple-500/20"
-          >
-            Send Message
-          </button>
-          {success && <p className="text-green-400 text-center mt-2">Message sent successfully!</p>}
-          {error && <p className="text-red-500 text-center mt-2">Failed to send message. Please try again.</p>}
-        </form>
-      </motion.div>
-    </section>
+          <input
+            type="email"
+            name="from_email"
+            placeholder="Your Email"
+            value={formData.from_email}
+            onChange={handleChange}
+            required
+            className="p-4 rounded-md border border-purple-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
+          />
+        </div>
+
+        <textarea
+          name="message"
+          rows={6}
+          placeholder="Your Message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          className="w-full p-4 rounded-md border border-purple-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 mb-6"
+        />
+
+        <button
+          type="submit"
+          className="w-full py-4 bg-purple-600 hover:bg-purple-700 transition-colors text-white font-bold rounded-lg shadow-md"
+        >
+          Send Message
+        </button>
+
+        {status === 'success' && (
+          <p className="text-green-400 text-center mt-4">Message sent successfully!</p>
+        )}
+        {status === 'error' && (
+          <p className="text-red-500 text-center mt-4">Failed to send message. Please try again.</p>
+        )}
+      </form>
+    </div>
   );
-}
+};
+
+export default Contact;

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
+import { motion } from 'framer-motion';
 
 const SERVICE_ID = 'service_aai4rps';
 const TEMPLATE_AUTO_REPLY = 'template_w504cfh';
@@ -18,7 +19,6 @@ const Contact = () => {
 
   const sendEmails = async () => {
     setStatus('loading');
-
     const params = {
       name: formData.name,
       email: formData.email,
@@ -27,15 +27,10 @@ const Contact = () => {
     };
 
     try {
-      // Send auto-reply to user
       await emailjs.send(SERVICE_ID, TEMPLATE_AUTO_REPLY, params, PUBLIC_KEY);
-
-      // Send notification to your Gmail
       await emailjs.send(SERVICE_ID, TEMPLATE_CONTACT_US, params, PUBLIC_KEY);
-
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-
     } catch (err) {
       console.error('Email send error:', err);
       setStatus('error');
@@ -48,39 +43,44 @@ const Contact = () => {
   };
 
   return (
-    <div className="p-6 rounded-2xl max-w-md mx-auto border border-purple-700 bg-gradient-to-br from-black to-gray-900 text-white shadow-2xl">
-      <h2 className="text-3xl font-bold text-center text-purple-400 mb-4">Contact Me</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="max-w-4xl mx-auto mt-12 p-8 rounded-2xl bg-gradient-to-br from-black to-gray-900 border border-purple-600 shadow-xl"
+    >
+      <h2 className="text-4xl font-bold text-center text-purple-400 mb-8">Contact Me</h2>
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 text-white">
         <input
           type="text"
           name="name"
+          placeholder="Your Name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Your Name"
           required
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
+          className="p-3 rounded-lg bg-gray-800 border border-purple-600 col-span-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <input
           type="email"
           name="email"
+          placeholder="Your Email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Your Email"
           required
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
+          className="p-3 rounded-lg bg-gray-800 border border-purple-600 col-span-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <textarea
           name="message"
+          placeholder="Your Message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="Your Message"
           required
           rows={5}
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
+          className="col-span-2 p-3 rounded-lg bg-gray-800 border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <button
           type="submit"
-          className="w-full py-3 rounded-md bg-purple-600 hover:bg-purple-700 transition font-semibold text-lg"
+          className="col-span-2 w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-700 transition font-semibold text-lg"
         >
           Send Message
         </button>
@@ -92,7 +92,7 @@ const Contact = () => {
       {status === 'error' && (
         <p className="mt-4 text-red-400 text-center">Failed to send message. Please try again.</p>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -21,12 +21,12 @@ export default function Hero() {
 
         <p className="max-w-2xl text-lg sm:text-xl text-gray-300 leading-relaxed mb-10">
           Designing secure, scalable, high-performance cloud systems in{' '}
-          <span className="text-blue-400 font-medium">AWS</span>,{' '}
-          <span className="text-red-400 font-medium">GCP</span>, and{' '}
-          <span className="text-indigo-400 font-medium">Azure</span> — specializing in{' '}
-          <span className="text-green-400 font-medium">CI/CD</span>,{' '}
-          <span className="text-yellow-400 font-medium">Kubernetes</span>, and{' '}
-          <span className="text-pink-400 font-medium">Zero Trust</span> architectures.
+          <span style={{ color: '#FF9900' }}>AWS</span>,{' '}
+          <span style={{ color: '#4285F4' }}>GCP</span>, and{' '}
+          <span style={{ color: '#0078D4' }}>Azure</span> — specializing in{' '}
+          <span style={{ color: '#00C7B7' }}>CI/CD</span>,{' '}
+          <span style={{ color: '#326CE5' }}>Kubernetes</span>, and{' '}
+          <span style={{ color: '#E91E63' }}>Zero Trust</span> architectures.
         </p>
 
         <Link

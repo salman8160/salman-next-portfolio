@@ -1,99 +1,95 @@
-'use client';
+// app/contact/page.tsx or components/Contact.tsx
+'use client'
 
-import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
-import { motion } from 'framer-motion';
-
-const SERVICE_ID = 'service_aai4rps';
-const TEMPLATE_AUTO_REPLY = 'template_w504cfh';
-const TEMPLATE_CONTACT_US = 'template_4u4u9xx';
-const PUBLIC_KEY = 'zPMOx3aXE2kluPXN7';
+import { useState } from 'react'
+import emailjs from 'emailjs-com'
+import { motion } from 'framer-motion'
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
-  const sendEmails = async () => {
-    setStatus('loading');
-    const params = {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-      title: 'New Contact Form Submission',
-    };
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_AUTO_REPLY, params, PUBLIC_KEY);
-      await emailjs.send(SERVICE_ID, TEMPLATE_CONTACT_US, params, PUBLIC_KEY);
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      await emailjs.send(
+        'service_aai4rps',
+        'template_4u4u9xx',
+        formData,
+        'Yq5UB_B3EvjgbbFdu'
+      )
+      setSuccess(true)
+      setError(false)
+      setFormData({ name: '', email: '', message: '' })
     } catch (err) {
-      console.error('Email send error:', err);
-      setStatus('error');
+      setError(true)
+      setSuccess(false)
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendEmails();
-  };
+  }
 
   return (
-    <motion.div
+    <motion.section
+      id="contact"
       initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="max-w-4xl mx-auto mt-12 p-8 rounded-2xl bg-gradient-to-br from-black to-gray-900 border border-purple-600 shadow-xl"
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="flex justify-center items-center min-h-screen px-4 py-16 bg-black text-white"
     >
-      <h2 className="text-4xl font-bold text-center text-purple-400 mb-8">Contact Me</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 text-white">
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="p-3 rounded-lg bg-gray-800 border border-purple-600 col-span-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="p-3 rounded-lg bg-gray-800 border border-purple-600 col-span-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        <textarea
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-          rows={5}
-          className="col-span-2 p-3 rounded-lg bg-gray-800 border border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        <button
-          type="submit"
-          className="col-span-2 w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-700 transition font-semibold text-lg"
-        >
-          Send Message
-        </button>
-      </form>
+      <div className="w-full max-w-5xl p-8 rounded-2xl border border-purple-500 bg-gradient-to-br from-zinc-900/80 to-black/70 backdrop-blur-md shadow-xl">
+        <h2 className="text-4xl font-bold text-center text-purple-400 mb-10">Contact Me</h2>
 
-      {status === 'success' && (
-        <p className="mt-4 text-green-400 text-center">Message sent successfully!</p>
-      )}
-      {status === 'error' && (
-        <p className="mt-4 text-red-400 text-center">Failed to send message. Please try again.</p>
-      )}
-    </motion.div>
-  );
-};
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+            <input
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your Name"
+              required
+              className="flex-1 p-4 rounded-lg bg-zinc-800 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+            />
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Your Email"
+              required
+              className="flex-1 p-4 rounded-lg bg-zinc-800 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+            />
+          </div>
 
-export default Contact;
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Your Message"
+            rows={5}
+            required
+            className="w-full p-4 rounded-lg bg-zinc-800 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+          />
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold hover:shadow-[0_0_15px_rgba(255,0,255,0.5)] transition-all"
+          >
+            Send Message
+          </motion.button>
+
+          {success && <p className="text-green-400 text-center mt-4">Message sent successfully!</p>}
+          {error && <p className="text-red-500 text-center mt-4">Failed to send message. Please try again.</p>}
+        </form>
+      </div>
+    </motion.section>
+  )
+}
+
+export default Contact

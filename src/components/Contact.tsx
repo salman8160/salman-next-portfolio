@@ -1,20 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import emailjs from '@emailjs/browser';
+import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 
-const SERVICE_ID = 'service_xxxxxx'; // 🔁 Replace with your real service ID
-const TEMPLATE_USER_REPLY = 'template_w504cfh'; // auto-reply
-const TEMPLATE_ADMIN_NOTIFY = 'template_4u4u9xx'; // admin alert
+const SERVICE_ID = 'service_aai4rps';
+const TEMPLATE_AUTO_REPLY = 'template_w504cfh';
+const TEMPLATE_CONTACT_US = 'template_4u4u9xx';
 const PUBLIC_KEY = 'zPMOx3aXE2kluPXN7';
 
-export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-
+const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,80 +19,81 @@ export default function Contact() {
   const sendEmails = async () => {
     setStatus('loading');
 
-    const templateParams = {
+    const params = {
       name: formData.name,
       email: formData.email,
       message: formData.message,
-      title: 'New Inquiry'
+      title: 'New Contact Form Submission',
     };
 
     try {
-      // 1. Send email to user (auto-reply)
-      await emailjs.send(SERVICE_ID, TEMPLATE_USER_REPLY, templateParams, PUBLIC_KEY);
+      // Send auto-reply to user
+      await emailjs.send(SERVICE_ID, TEMPLATE_AUTO_REPLY, params, PUBLIC_KEY);
 
-      // 2. Send email to admin (you)
-      await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN_NOTIFY, templateParams, PUBLIC_KEY);
+      // Send notification to your Gmail
+      await emailjs.send(SERVICE_ID, TEMPLATE_CONTACT_US, params, PUBLIC_KEY);
 
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
-      console.error('EmailJS Error:', error);
+
+    } catch (err) {
+      console.error('Email send error:', err);
       setStatus('error');
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      setStatus('error');
-      return;
-    }
     sendEmails();
   };
 
   return (
-    <div className="bg-zinc-900 text-white p-8 rounded-xl border border-purple-500 shadow-lg max-w-md mx-auto mt-10">
-      <h2 className="text-center text-3xl font-bold text-purple-400 mb-6">Contact Me</h2>
-
-      <form onSubmit={handleSubmit}>
+    <div className="p-6 rounded-2xl max-w-md mx-auto border border-purple-700 bg-gradient-to-br from-black to-gray-900 text-white shadow-2xl">
+      <h2 className="text-3xl font-bold text-center text-purple-400 mb-4">Contact Me</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           name="name"
-          placeholder="Your Name"
-          className="w-full p-3 mb-4 bg-zinc-800 border border-purple-500 rounded text-white"
-          onChange={handleChange}
           value={formData.name}
+          onChange={handleChange}
+          placeholder="Your Name"
+          required
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
         />
         <input
           type="email"
           name="email"
-          placeholder="Your Email"
-          className="w-full p-3 mb-4 bg-zinc-800 border border-purple-500 rounded text-white"
-          onChange={handleChange}
           value={formData.email}
+          onChange={handleChange}
+          placeholder="Your Email"
+          required
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
         />
         <textarea
           name="message"
-          placeholder="Your Message"
-          className="w-full p-3 h-32 bg-zinc-800 border border-purple-500 rounded text-white mb-4"
-          onChange={handleChange}
           value={formData.message}
+          onChange={handleChange}
+          placeholder="Your Message"
+          required
+          rows={5}
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-purple-700"
         />
-
         <button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded"
+          className="w-full py-3 rounded-md bg-purple-600 hover:bg-purple-700 transition font-semibold text-lg"
         >
           Send Message
         </button>
-
-        {status === 'success' && (
-          <p className="text-green-500 mt-4 text-center">Message sent successfully!</p>
-        )}
-        {status === 'error' && (
-          <p className="text-red-500 mt-4 text-center">Failed to send message. Please try again.</p>
-        )}
       </form>
+
+      {status === 'success' && (
+        <p className="mt-4 text-green-400 text-center">Message sent successfully!</p>
+      )}
+      {status === 'error' && (
+        <p className="mt-4 text-red-400 text-center">Failed to send message. Please try again.</p>
+      )}
     </div>
   );
-}
+};
+
+export default Contact;

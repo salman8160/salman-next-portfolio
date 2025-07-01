@@ -1,86 +1,103 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 
+const SERVICE_ID = 'service_xxxxxx'; // 🔁 Replace with your real service ID
+const TEMPLATE_USER_REPLY = 'template_w504cfh'; // auto-reply
+const TEMPLATE_ADMIN_NOTIFY = 'template_4u4u9xx'; // admin alert
+const PUBLIC_KEY = 'zPMOx3aXE2kluPXN7';
+
 export default function Contact() {
-  const form = useRef<HTMLFormElement>(null);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
 
-  const sendEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-    if (!form.current) return;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const sendEmails = async () => {
+    setStatus('loading');
+
+    const templateParams = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      title: 'New Inquiry'
+    };
 
     try {
-      // Send user auto-reply
-      await emailjs.sendForm(
-        'service_aai4rps',
-        'template_w504cfh', // Auto-reply to user
-        form.current,
-        'zPMOX3aXE2kluPXN7'
-      );
+      // 1. Send email to user (auto-reply)
+      await emailjs.send(SERVICE_ID, TEMPLATE_USER_REPLY, templateParams, PUBLIC_KEY);
 
-      // Send admin notification
-      await emailjs.send(
-        'service_aai4rps',
-        'template_4u4u9xx', // Notify you (admin)
-        {
-          name: form.current.user_name.value,
-          email: form.current.user_email.value,
-          message: form.current.message.value,
-          title: 'Contact Form Submission',
-        },
-        'zPMOX3aXE2kluPXN7'
-      );
+      // 2. Send email to admin (you)
+      await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN_NOTIFY, templateParams, PUBLIC_KEY);
 
-      setSuccessMessage('Message sent successfully!');
-      setErrorMessage('');
-      form.current.reset(); // Clear form
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
     } catch (error) {
-      console.error(error);
-      setErrorMessage('Failed to send message. Please try again.');
-      setSuccessMessage('');
+      console.error('EmailJS Error:', error);
+      setStatus('error');
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus('error');
+      return;
+    }
+    sendEmails();
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black text-white" id="contact">
-      <div className="bg-zinc-900 p-10 rounded-xl border border-purple-600 shadow-lg w-full max-w-lg">
-        <h2 className="text-3xl font-bold text-center mb-6 text-purple-400">Contact Me</h2>
-        <form ref={form} onSubmit={sendEmail} className="space-y-4">
-          <input
-            type="text"
-            name="user_name"
-            placeholder="Your Name"
-            required
-            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
-          />
-          <input
-            type="email"
-            name="user_email"
-            placeholder="Your Email"
-            required
-            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
-          />
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            rows={5}
-            required
-            className="w-full px-4 py-2 rounded bg-zinc-800 border border-purple-700 text-white"
-          ></textarea>
-          <button
-            type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
-          >
-            Send Message
-          </button>
-          {successMessage && <p className="text-green-400 text-sm">{successMessage}</p>}
-          {errorMessage && <p className="text-red-400 text-sm">{errorMessage}</p>}
-        </form>
-      </div>
+    <div className="bg-zinc-900 text-white p-8 rounded-xl border border-purple-500 shadow-lg max-w-md mx-auto mt-10">
+      <h2 className="text-center text-3xl font-bold text-purple-400 mb-6">Contact Me</h2>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          className="w-full p-3 mb-4 bg-zinc-800 border border-purple-500 rounded text-white"
+          onChange={handleChange}
+          value={formData.name}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          className="w-full p-3 mb-4 bg-zinc-800 border border-purple-500 rounded text-white"
+          onChange={handleChange}
+          value={formData.email}
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          className="w-full p-3 h-32 bg-zinc-800 border border-purple-500 rounded text-white mb-4"
+          onChange={handleChange}
+          value={formData.message}
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded"
+        >
+          Send Message
+        </button>
+
+        {status === 'success' && (
+          <p className="text-green-500 mt-4 text-center">Message sent successfully!</p>
+        )}
+        {status === 'error' && (
+          <p className="text-red-500 mt-4 text-center">Failed to send message. Please try again.</p>
+        )}
+      </form>
     </div>
   );
 }

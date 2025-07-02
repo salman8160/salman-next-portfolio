@@ -15,11 +15,11 @@ export default function CloudInfrastructure() {
 
         {/* Overview */}
         <p className="text-lg mb-6">
-          I specialize in designing, implementing, and hardening cloud-native infrastructure with a focus on security, scalability, and automation. My work spans multi-cloud environments (AWS & GCP), where I apply principles like **defense-in-depth**, **least privilege**, and **separation of duties** through infrastructure as code (IaC), automated guardrails, and policy-driven enforcement.
+          I specialize in designing, implementing, and hardening cloud-native infrastructure with a focus on security, scalability, and automation. My work spans multi-cloud environments (AWS & GCP), where I apply principles like <strong>defense-in-depth</strong>, <strong>least privilege</strong>, and <strong>separation of duties</strong> through infrastructure as code (IaC), automated guardrails, and policy-driven enforcement.
         </p>
 
         <p className="text-lg mb-6">
-          My strategy revolves around building platforms that are **secure by design** — embedding controls at every layer: identity, network, workload, data, and runtime. I ensure that misconfigurations are minimized, blast radius is controlled, and human access is tightly governed using PoLP and Zero Trust principles.
+          My strategy revolves around building platforms that are <strong>secure by design</strong> — embedding controls at every layer: identity, network, workload, data, and runtime. I ensure that misconfigurations are minimized, blast radius is controlled, and human access is tightly governed using PoLP and Zero Trust principles.
         </p>
 
         {/* Tools & Tech */}
@@ -34,7 +34,7 @@ export default function CloudInfrastructure() {
         {/* Real World Project */}
         <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">📌 Real-World Implementation</h2>
         <p className="text-lg mb-6">
-          In a recent enterprise-grade engagement, I led the secure infrastructure design for a microservices-based application on AWS EKS. The goal was to build a **resilient Zero Trust architecture** that passed compliance audits (SOC2, ISO 27001) and supported rapid CI/CD releases without compromising posture.
+          In a recent enterprise-grade engagement, I led the secure infrastructure design for a microservices-based application on AWS EKS. The goal was to build a <strong>resilient Zero Trust architecture</strong> that passed compliance audits (SOC2, ISO 27001) and supported rapid CI/CD releases without compromising posture.
         </p>
 
         <ul className="list-disc ml-6 text-base mb-6">
@@ -49,7 +49,7 @@ export default function CloudInfrastructure() {
         {/* Technical Strategy */}
         <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">🧠 Strategic Approach</h2>
         <p className="text-lg mb-6">
-          My approach to cloud security is **proactive and codified**. I believe security must be built into the CI/CD lifecycle—not retrofitted. This includes:
+          My approach to cloud security is <strong>proactive and codified</strong>. I believe security must be built into the CI/CD lifecycle—not retrofitted. This includes:
         </p>
         <ul className="list-disc ml-6 text-base mb-6">
           <li>Shifting left through pre-deployment policy validation and unit testing of Terraform plans</li>
@@ -67,13 +67,29 @@ export default function CloudInfrastructure() {
           <li>✅ Accelerated developer velocity by enabling secure, self-service infrastructure pipelines</li>
         </ul>
 
-        {/* Architecture */}
+        {/* 3D Diagram */}
         <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">🧬 Visual Architecture</h2>
         <p className="text-lg mb-6">
           Below is a real-world EKS architecture I designed and deployed, demonstrating secure-by-default infrastructure:
         </p>
         <div className="my-10">
           <ArchitectureEks3D />
+        </div>
+
+        {/* Video Animation Section */}
+        <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">🎬 Architecture Animation</h2>
+        <p className="text-lg mb-6">
+          This video walkthrough illustrates how infrastructure-as-code, IAM boundaries, runtime policies, and observability tools come together in a real-world secure deployment pipeline.
+        </p>
+        <div className="w-full rounded-xl overflow-hidden shadow-xl border border-purple-800">
+          <video
+            src="/assets/videos/cloud-infra-architecture.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover"
+          />
         </div>
 
         {/* Links */}

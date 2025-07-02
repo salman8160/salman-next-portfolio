@@ -2,7 +2,6 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import ArchitectureEks3D from '@/components/Architecture/ArchitectureEks3D';
 
 export default function CloudInfrastructure() {
   return (
@@ -67,21 +66,12 @@ export default function CloudInfrastructure() {
           <li>✅ Accelerated developer velocity by enabling secure, self-service infrastructure pipelines</li>
         </ul>
 
-        {/* 3D Diagram */}
+        {/* Architecture Animation Replacing 3D Sphere */}
         <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">🧬 Visual Architecture</h2>
         <p className="text-lg mb-6">
-          Below is a real-world EKS architecture I designed and deployed, demonstrating secure-by-default infrastructure:
+          This animated diagram shows how identity, network, runtime, and observability controls are layered in a real-world secure EKS deployment using Terraform, OPA, IRSA, and SIEM tools.
         </p>
-        <div className="my-10">
-          <ArchitectureEks3D />
-        </div>
-
-        {/* Video Animation Section */}
-        <h2 className="text-2xl font-semibold mt-10 mb-2 text-purple-400">🎬 Architecture Animation</h2>
-        <p className="text-lg mb-6">
-          This video walkthrough illustrates how infrastructure-as-code, IAM boundaries, runtime policies, and observability tools come together in a real-world secure deployment pipeline.
-        </p>
-        <div className="w-full rounded-xl overflow-hidden shadow-xl border border-purple-800">
+        <div className="w-full rounded-xl overflow-hidden shadow-xl border border-purple-800 mb-10">
           <video
             src="/assets/videos/cloud-infra-architecture.mp4"
             autoPlay
